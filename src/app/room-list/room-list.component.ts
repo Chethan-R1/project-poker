@@ -22,9 +22,16 @@ export class RoomListComponent implements OnInit {
 
   constructor(private router: Router, private votingService: VotingService) {}
 
-  ngOnInit() {
-    this.loadRooms();
-  }
+
+  ngOnInit(): void {
+  
+ 
+}
+
+ // ngOnInit() {
+  //   this.loadRooms();
+  // }
+ 
 
   get filteredRooms() {
     return this.rooms.filter(room =>

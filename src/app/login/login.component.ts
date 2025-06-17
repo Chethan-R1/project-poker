@@ -17,7 +17,8 @@ export class LoginComponent {
 
   constructor(private userService: UserService,private route:Router) {}
 
- login(): void {
+
+  login(): void {
   const trimmed = this.username.trim();
   if (trimmed) {
     const user: UserDetails = {
@@ -25,11 +26,13 @@ export class LoginComponent {
       username: trimmed
     };
 
-    this.userService.addUser(user).subscribe({
-      next: () => {
+   this.userService.addUser(user).subscribe({
+      next: (user: any) => {
+        console.log(user); 
         localStorage.setItem('currentUser', trimmed);
 
-        if (trimmed.toLowerCase() === 'admin') {
+        
+        if (user.firstUser === true) {
           this.route.navigate(['/room']);
         } else {
           const redirectUrl = localStorage.getItem('redirectAfterLogin') || '/';
@@ -44,6 +47,35 @@ export class LoginComponent {
     });
   }
 }
+
+
+//  login(): void {
+//   const trimmed = this.username.trim();
+//   if (trimmed) {
+//     const user: UserDetails = {
+//       userId: crypto.randomUUID(),
+//       username: trimmed
+//     };
+
+//     this.userService.addUser(user).subscribe({
+//       next: () => {
+//         localStorage.setItem('currentUser', trimmed);
+
+//         if (trimmed.toLowerCase() === 'admin') {
+//           this.route.navigate(['/room']);
+//         } else {
+//           const redirectUrl = localStorage.getItem('redirectAfterLogin') || '/';
+//           localStorage.removeItem('redirectAfterLogin');
+//           this.route.navigateByUrl(redirectUrl);
+//         }
+//       },
+//       error: (err) => {
+//         console.error('Failed to add user:', err);
+//         alert('Login failed!');
+//       }
+//     });
+//   }
+// }
 
 
   
