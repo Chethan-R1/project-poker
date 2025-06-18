@@ -18,30 +18,38 @@ export class LoginComponent {
   constructor(private userService: UserService,private route:Router) {}
 
 
-  login(): void {
+ getNextUserId(): string {
+  const key = 'planitpoker_user_counter';
+  let counter = Number(localStorage.getItem(key)) || 1;
+  localStorage.setItem(key, String(counter + 1));
+  return `user-${counter}`;
+}
+
+ login(): void {
   const trimmed = this.username.trim();
   if (trimmed) {
     const user: UserDetails = {
-      userId: crypto.randomUUID(),
+      userId: this.getNextUserId(),
       username: trimmed,
-      firstUser:false,
+      firstUser: false // temporary default
     };
 
-   this.userService.addUser(user).subscribe({
-      next: (user: any) => {
-        console.log(user); 
-        localStorage.setItem('First User', trimmed);
-        localStorage.setItem('current User', trimmed);
+    this.userService.addUser(user).subscribe({
+      next: (savedUser) => {
+        // Save user details in local storage
+        localStorage.setItem('currentUser', trimmed);
+        localStorage.setItem('currentUserId', savedUser.userId);
 
-        
-        if (user.firstUser === true) {
-          this.route.navigate(['/room']);
-        } else {
-            localStorage.setItem('current User', trimmed);
-          const redirectUrl = localStorage.getItem('redirectAfterLogin') || '/';
-          localStorage.removeItem('redirectAfterLogin');
-          this.route.navigateByUrl(redirectUrl);
-        }
+        // ✅ Check using backend if this is first user
+        this.userService.isFirstUser(savedUser.userId).subscribe((isFirst: boolean) => {
+          if (isFirst) {
+            this.route.navigate(['/room']); // Admin view
+          } else {
+            const redirectUrl = localStorage.getItem('redirectAfterLogin') || '/';
+            localStorage.removeItem('redirectAfterLogin');
+            this.route.navigateByUrl(redirectUrl); // Join vote room via link
+          }
+        });
       },
       error: (err) => {
         console.error('Failed to add user:', err);
@@ -50,36 +58,6 @@ export class LoginComponent {
     });
   }
 }
-
-
-//  login(): void {
-//   const trimmed = this.username.trim();
-//   if (trimmed) {
-//     const user: UserDetails = {
-//       userId: crypto.randomUUID(),
-//       username: trimmed
-//     };
-
-//     this.userService.addUser(user).subscribe({
-//       next: () => {
-//         localStorage.setItem('currentUser', trimmed);
-
-//         if (trimmed.toLowerCase() === 'admin') {
-//           this.route.navigate(['/room']);
-//         } else {
-//           const redirectUrl = localStorage.getItem('redirectAfterLogin') || '/';
-//           localStorage.removeItem('redirectAfterLogin');
-//           this.route.navigateByUrl(redirectUrl);
-//         }
-//       },
-//       error: (err) => {
-//         console.error('Failed to add user:', err);
-//         alert('Login failed!');
-//       }
-//     });
-//   }
-// }
-
 
   
 }

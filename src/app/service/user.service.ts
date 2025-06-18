@@ -25,8 +25,8 @@ export class UserService {
     return this.http.post<UserDetails>(`${this.baseUrl}`, user);
   }
 
-   isFirstUser(username: string): Observable<boolean> {
-    return this.http.get<boolean>(`${this.baseUrl}/isFirstUser/${username}`);
+   isFirstUser(userId: string): Observable<boolean> {
+    return this.http.get<boolean>(`${this.baseUrl}/isFirstUser/${userId}`);
   }
 
 deleteUser(user: UserDetails) {

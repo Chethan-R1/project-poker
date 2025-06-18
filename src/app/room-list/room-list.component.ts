@@ -24,14 +24,9 @@ export class RoomListComponent implements OnInit {
 
 
   ngOnInit(): void {
-  
+     this.loadRooms();
  
 }
-
- // ngOnInit() {
-  //   this.loadRooms();
-  // }
- 
 
   get filteredRooms() {
     return this.rooms.filter(room =>

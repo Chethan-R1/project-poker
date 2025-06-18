@@ -3,7 +3,7 @@ import { ActivatedRouteSnapshot, CanActivateFn, Router, RouterStateSnapshot } fr
 
 export const authGuard: CanActivateFn = (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {
   const router = inject(Router);
-  const currentUser = localStorage.getItem('current User');
+  const currentUser = localStorage.getItem('currentUser');
 
   if (currentUser) {
     return true;
