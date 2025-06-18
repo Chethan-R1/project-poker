@@ -5,6 +5,8 @@ import { Observable } from 'rxjs';
 export interface UserDetails{
   userId:string;
   username:string;
+  firstUser:boolean;
+  
 }
 @Injectable({
   providedIn: 'root'
@@ -27,9 +29,8 @@ export class UserService {
     return this.http.get<boolean>(`${this.baseUrl}/isFirstUser/${username}`);
   }
 
-  deleteUser(user: UserDetails): Observable<void> {
-    return this.http.request<void>('delete', `${this.baseUrl}`, {
-      body: user
-    });
-  }
+deleteUser(user: UserDetails) {
+  return this.http.delete<void>(`${this.baseUrl}/${user.userId}`);
+}
+
 }

@@ -19,6 +19,7 @@ export class HeaderComponent implements OnInit {
   users: UserDetails[] = [];
   newUser = '';
   currentUser: string | null = null;
+user: any;
 
   constructor(private userService:UserService,private route:Router) {}
 
@@ -32,7 +33,9 @@ export class HeaderComponent implements OnInit {
 
   fetchUsers() {
     this.userService.getAllUsers().subscribe({
-      next: (data) => this.users = data,
+      next: (data) =>{this.users = data,
+      console.log(data);
+      },
       error: (err) => console.error('Failed to load users', err)
     });
   }
@@ -41,29 +44,31 @@ export class HeaderComponent implements OnInit {
     this.showUsers = !this.showUsers;
   }
 
-  addUser() {
-    const trimmedUser = this.newUser.trim();
-    if (trimmedUser && !this.users.find(u => u.username === trimmedUser)) {
-      const newUserDetails: UserDetails = {
-        userId: '',
-        username: trimmedUser
-      };
-      this.userService.addUser(newUserDetails).subscribe({
-        next: (createdUser) => {
-          this.users.push(createdUser);
-          this.selectUser(createdUser.username);
-          this.newUser = '';
-        },
-        error: (err) => console.error('Failed to add user', err)
-      });
-    }
-  }
+  // addUser() {
+  //   const trimmedUser = this.newUser.trim();
+  //   if (trimmedUser && !this.users.find(u => u.username === trimmedUser)) {
+  //     const newUserDetails: UserDetails = {
+  //       userId: '',
+  //       username: trimmedUser,
+  //       firstUser:false,
+        
+  //     };
+  //     this.userService.addUser(newUserDetails).subscribe({
+  //       next: (createdUser) => {
+  //         this.users.push(createdUser);
+  //         this.selectUser(createdUser.username);
+  //         this.newUser = '';
+  //       },
+  //       error: (err) => console.error('Failed to add user', err)
+  //     });
+  //   }
+  // }
 
-  selectUser(username: string) {
-    this.currentUser = username;
-    localStorage.setItem('currentUser', username);
-    this.showUsers = false;
-  }
+  // selectUser(username: string) {
+  //   this.currentUser = username;
+  //   localStorage.setItem('currentUser', username);
+  //   this.showUsers = false;
+  // }
 
   logout(){
  localStorage.clear();

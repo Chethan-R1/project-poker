@@ -247,3 +247,56 @@
 .invite-section button:hover {
   background-color: #45a049;
 }
+
+.copied-message {
+  margin-top: 10px;
+  color: green;
+  font-weight: bold;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.user-list {
+  background-color: #f8f9fa;
+  border-radius: 12px;
+  padding: 16px;
+  margin-top: 20px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.user-list h4 {
+  margin-bottom: 12px;
+  font-size: 18px;
+  color: #333;
+}
+
+.user-list ul {
+  list-style: none;
+  padding: 0;
+}
+
+.user-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  margin-bottom: 8px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+.user-list button {
+  background-color: #ff4d4d;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  padding: 4px 10px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s ease;
+}
+
+.user-list button:hover {
+  background-color: #e60000;
+}
+

@@ -54,8 +54,28 @@
     readonly
     (click)="selectInput($event)"
   />
-  <button (click)="copyInviteLink()">Copy</button>
+  <!-- <button (click)="copyInviteLink()">Copy</button> -->
+   <button (click)="copyInviteLink()">Copy Invite Link</button>
+
+<div *ngIf="copied" class="copied-message">
+  ✅ Invite link copied!
 </div>
+
+</div>
+
+
+<div class="user-list" *ngIf="users && users.length > 0">
+  <h4>Joined Users</h4>
+  <ul>
+    <li *ngFor="let user of users">
+      👤 {{ user.username }}
+
+      <!-- Show 'Remove' button only if *current* user is the first user -->
+       <button *ngIf="isFirstUser()" (click)="removeUser(user)">🗑 Remove</button>
+    </li>
+  </ul>
+</div>
+
 
 
 

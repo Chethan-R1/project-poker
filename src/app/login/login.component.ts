@@ -23,18 +23,21 @@ export class LoginComponent {
   if (trimmed) {
     const user: UserDetails = {
       userId: crypto.randomUUID(),
-      username: trimmed
+      username: trimmed,
+      firstUser:false,
     };
 
    this.userService.addUser(user).subscribe({
       next: (user: any) => {
         console.log(user); 
-        localStorage.setItem('currentUser', trimmed);
+        localStorage.setItem('First User', trimmed);
+        localStorage.setItem('current User', trimmed);
 
         
         if (user.firstUser === true) {
           this.route.navigate(['/room']);
         } else {
+            localStorage.setItem('current User', trimmed);
           const redirectUrl = localStorage.getItem('redirectAfterLogin') || '/';
           localStorage.removeItem('redirectAfterLogin');
           this.route.navigateByUrl(redirectUrl);

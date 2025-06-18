@@ -6,6 +6,7 @@ import { StoryDetails, StoryService } from '../service/story.service';
 import { PollService, Vote } from '../service/poll.service';
 import { RoomDetails, VotingService } from '../service/voting.service';
 import { HeaderComponent } from "../header/header.component";
+import { UserDetails, UserService } from '../service/user.service';
 
 
 @Component({
@@ -18,6 +19,7 @@ import { HeaderComponent } from "../header/header.component";
 export class VotingComponent {
   roomId = '';
   story = '';
+  users: UserDetails[] = [];
   stories: StoryDetails[] = [];
   currentStoryIndex: number | null = null;
   selectedVote:Vote[]= [];
@@ -29,7 +31,7 @@ export class VotingComponent {
   rooms: RoomDetails[] = [];
 showDropdown = false;
 
-  constructor(private route: ActivatedRoute, private storyService: StoryService,private pollService:PollService,private votingService:VotingService) {}
+  constructor(private route: ActivatedRoute, private storyService: StoryService,private pollService:PollService,private votingService:VotingService,private userService:UserService) {}
 
   ngOnInit() {
     this.roomId = this.route.snapshot.paramMap.get('roomId') || '';
@@ -39,7 +41,8 @@ showDropdown = false;
     // this.storyService.getAllStories().subscribe((data) => {
     //   this.stories = data;
     
-  this.loadStories(); // Load stories specific to this room
+  this.loadStories(); 
+   this.fetchUsers();// Load stories specific to this room
   }
   loadStories() {
   this.storyService.getStoriesByRoom(this.roomId).subscribe({
@@ -91,11 +94,23 @@ getInviteLink(): string {
   return `${window.location.origin}/vote/${this.roomId}`;
 }
 
+copied = false;
+
 copyInviteLink(): void {
   navigator.clipboard.writeText(this.getInviteLink()).then(() => {
-    alert('Invite link copied!');
+    this.copied = true;
+    setTimeout(() => {
+      this.copied = false;
+    }, 2000); // message disappears after 2 seconds
   });
 }
+
+
+// copyInviteLink(): void {
+//   navigator.clipboard.writeText(this.getInviteLink()).then(() => {
+//     alert('Invite link copied!');
+//   });
+// }
 
 
 
@@ -106,6 +121,34 @@ getAllRooms() {
   });
 }
 
+ fetchUsers() {
+    this.userService.getAllUsers().subscribe({
+      next: (data) =>{this.users = data,
+      console.log(data);
+      },
+      error: (err) => console.error('Failed to load users', err)
+    });
+  }
+
+
+  isFirstUser(): boolean {
+  const firstUser = localStorage.getItem('First User');
+  const currentUser = localStorage.getItem('current User');
+  return firstUser === currentUser;
+}
+
+  removeUser(user: UserDetails) {
+  if (!confirm(`Are you sure you want to remove ${user.username}?`)) return;
+
+  this.userService.deleteUser(user).subscribe({
+    next: (res) => {
+      console.log("Delete response", res)
+      this.users = this.users.filter(u => u.userId !== user.userId);
+      console.log(`${user.username} removed`);
+    },
+    error: (err) => console.error('Failed to remove user', err)
+  });
+}
 
 
 
