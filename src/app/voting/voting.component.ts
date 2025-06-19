@@ -96,14 +96,31 @@ getInviteLink(): string {
 
 copied = false;
 
-copyInviteLink(): void {
-  navigator.clipboard.writeText(this.getInviteLink()).then(() => {
-    this.copied = true;
-    setTimeout(() => {
-      this.copied = false;
-    }, 2000); // message disappears after 2 seconds
-  });
+  copyInviteLink(): void {
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(this.getInviteLink()).then(() => {
+      this.copied = true;
+      setTimeout(() => {
+        this.copied = false;
+      }, 800);
+    }).catch(err => {
+      console.error('Failed to copy: ', err);
+    });
+  } else {
+    console.error('Clipboard API not available');
+    alert('Clipboard copy not supported in this browser.');
+  }
 }
+
+
+// copyInviteLink(): void {
+//   navigator.clipboard.writeText(this.getInviteLink()).then(() => {
+//     this.copied = true;
+//     setTimeout(() => {
+//       this.copied = false;
+//     }, 2000); // message disappears after 2 seconds
+//   });
+// }
 
 
 // copyInviteLink(): void {
